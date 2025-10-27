@@ -49,8 +49,8 @@
 ### Clone and Install
 
 ```bash
-git clone https://github.com/MrChirag12/HRX-04_AvengersAssemble.git
-cd HRX-04_AvengersAssemble
+git https://github.com/Anoop1925/Youth-Coders-Hack-2025--Eduverse.git
+cd Eduverse
 npm install
 
 
