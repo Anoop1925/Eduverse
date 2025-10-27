@@ -1,0 +1,8 @@
+opencv-python==4.8.1.78
+Pillow==10.0.1
+numpy==1.26.4
+google-generativeai==0.3.2
+streamlit==1.28.1
+streamlit-extras==0.3.5
+mediapipe==0.10.13
+python-dotenv==1.0.0
