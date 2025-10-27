@@ -2,6 +2,146 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
+// Function to search YouTube videos from Code with Harry playlists
+async function searchYouTubeVideo(topic: string, courseName: string): Promise<string> {
+  try {
+    const youtubeApiKey = process.env.YOUTUBE_API_KEY;
+    if (!youtubeApiKey) {
+      console.warn("⚠️ YouTube API key not found, skipping video search");
+      return "";
+    }
+
+    const searchQuery = `${topic} tutorial`;
+    console.log(`🔍 Searching playlist for: "${searchQuery}"`);
+    
+    // Priority 1: Search Code with Harry's PLAYLISTS (most reliable approach)
+    const codeWithHarryId = 'UCeVMnSShP_Iviwkknt83cww';
+    
+    try {
+      console.log('   🎬 Searching Code with Harry playlists...');
+      
+      // Step 1: Search for playlists matching the topic
+      const playlistSearch = await axios.get(
+        `https://www.googleapis.com/youtube/v3/search`,
+        {
+          params: {
+            part: 'id,snippet',
+            maxResults: 3,
+            q: topic, // Search using just the topic (e.g., "Python", "JavaScript")
+            type: 'playlist',
+            channelId: codeWithHarryId,
+            key: youtubeApiKey,
+          }
+        }
+      );
+
+      if (playlistSearch.data.items && playlistSearch.data.items.length > 0) {
+        // Step 2: Get the first matching playlist
+        for (const playlistItem of playlistSearch.data.items) {
+          const playlistId = playlistItem.id.playlistId;
+          const playlistTitle = playlistItem.snippet.title;
+          
+          console.log(`   📚 Found playlist: "${playlistTitle}"`);
+          
+          // Step 3: Get videos from this playlist
+          const playlistVideos = await axios.get(
+            `https://www.googleapis.com/youtube/v3/playlistItems`,
+            {
+              params: {
+                part: 'contentDetails,snippet',
+                maxResults: 5,
+                playlistId: playlistId,
+                key: youtubeApiKey,
+              }
+            }
+          );
+
+          if (playlistVideos.data.items && playlistVideos.data.items.length > 0) {
+            // Step 4: Validate each video for embeddability
+            for (const video of playlistVideos.data.items) {
+              const videoId = video.contentDetails.videoId;
+              
+              // Verify embeddable status
+              const videoCheck = await axios.get(
+                `https://www.googleapis.com/youtube/v3/videos`,
+                {
+                  params: {
+                    part: 'status,snippet',
+                    id: videoId,
+                    key: youtubeApiKey,
+                  }
+                }
+              );
+
+              if (videoCheck.data.items && videoCheck.data.items.length > 0) {
+                const videoData = videoCheck.data.items[0];
+                if (videoData.status.embeddable && videoData.status.privacyStatus === 'public') {
+                  const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                  console.log(`   ✅ Found from playlist "${playlistTitle}": "${videoData.snippet.title.substring(0, 50)}"`);
+                  return videoUrl;
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      console.log('   ℹ️ No matching playlist found, trying direct video search...');
+      
+      // Fallback: Direct video search in Code with Harry channel
+      const videoSearch = await axios.get(
+        `https://www.googleapis.com/youtube/v3/search`,
+        {
+          params: {
+            part: 'id,snippet',
+            maxResults: 5,
+            q: searchQuery,
+            type: 'video',
+            channelId: codeWithHarryId,
+            key: youtubeApiKey,
+            videoEmbeddable: 'true',
+            order: 'relevance',
+          }
+        }
+      );
+
+      if (videoSearch.data.items && videoSearch.data.items.length > 0) {
+        for (const item of videoSearch.data.items) {
+          const videoId = item.id.videoId;
+          
+          const videoCheck = await axios.get(
+            `https://www.googleapis.com/youtube/v3/videos`,
+            {
+              params: {
+                part: 'status,snippet',
+                id: videoId,
+                key: youtubeApiKey,
+              }
+            }
+          );
+
+          if (videoCheck.data.items && videoCheck.data.items.length > 0) {
+            const video = videoCheck.data.items[0];
+            if (video.status.embeddable && video.status.privacyStatus === 'public') {
+              const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+              console.log(`   ✅ Found video: "${video.snippet.title.substring(0, 50)}"`);
+              return videoUrl;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.log('   ⚠️ Code with Harry search failed:', err);
+    }
+
+    console.warn(`⚠️ No embeddable videos found for: ${searchQuery}`);
+    return "";
+  } catch (error) {
+    console.error("❌ YouTube API Error:", error);
+    return "";
+  }
+}
+
 // Function to generate image using AI Guru Lab API
 async function generateCourseImage(courseName: string, category: string, level: string): Promise<string> {
   try {
@@ -48,6 +188,12 @@ export async function POST(req: NextRequest) {
     includeVideo,
     noOfChapters
   } = await req.json();
+
+  console.log("📝 Course Generation Request:");
+  console.log("- Name:", name);
+  console.log("- Include Video:", includeVideo);
+  console.log("- YouTube API Key exists:", !!process.env.YOUTUBE_API_KEY);
+  console.log("- YouTube API Key (first 20):", process.env.YOUTUBE_API_KEY?.substring(0, 20));
 
   const prompt = `Generate a detailed, guided, gamified LMS-style learning course based on the following details. Each chapter should have a duration (e.g., '2 hours') and a list of subtopics. Each subtopic should include:
 - A theory/reading section (short explanation)
@@ -96,7 +242,7 @@ Number of Chapters: ${noOfChapters}`;
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -142,6 +288,23 @@ Number of Chapters: ${noOfChapters}`;
     courseData.course.bannerImageUrl = bannerImageUrl;
     courseData.course.cid = uuidv4();
     courseData.course.userEmail = "demo@user.com";
+
+    // If includeVideo is true, fetch YouTube videos for each subtopic
+    if (includeVideo) {
+      console.log("🎬 Fetching YouTube videos for subtopics...");
+      for (const chapter of courseData.course.chapters) {
+        for (const subtopic of chapter.subtopics) {
+          if (!subtopic.videoUrl || subtopic.videoUrl === "") {
+            console.log(`Searching video for: ${subtopic.title}`);
+            const videoUrl = await searchYouTubeVideo(subtopic.title, name);
+            subtopic.videoUrl = videoUrl;
+            console.log(`✅ Found video: ${videoUrl}`);
+          }
+        }
+      }
+    } else {
+      console.log("⏭️ Video search skipped (includeVideo is false)");
+    }
 
     return NextResponse.json(courseData);
   } catch (error) {

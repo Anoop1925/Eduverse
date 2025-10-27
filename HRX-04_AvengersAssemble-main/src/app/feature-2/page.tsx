@@ -76,8 +76,9 @@ export default function Feature2Page() {
           courses.map((course) => {
             const total = course.noOfChapters || (course.chapters?.length ?? 0);
             const completed = Math.floor(Math.random() * (total + 1));
+            const courseId = course.cid || course.id || course.name;
             return (
-              <Link key={course.cid} href={`/feature-2/${course.cid}`}>
+              <Link key={courseId} href={`/feature-2/${courseId}`}>
                 <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200">
                   {/* Course Banner Image */}
                   <div className="w-full h-48 relative bg-gradient-to-br from-blue-50 to-indigo-100">

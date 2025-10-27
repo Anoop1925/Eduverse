@@ -11,7 +11,9 @@ export async function GET(req: NextRequest) {
       const result = await pool.query("SELECT * FROM courses WHERE cid = $1", [cid]);
       if (result.rows.length === 0) return NextResponse.json({ error: "Course not found" }, { status: 404 });
       const courseData = result.rows[0].coursejson;
-      // Add bannerImageUrl to the course data if it exists
+      // Add database fields to the course data
+      courseData.cid = result.rows[0].cid;
+      courseData.id = result.rows[0].id;
       if (result.rows[0].bannerimageurl) {
         courseData.bannerImageUrl = result.rows[0].bannerimageurl;
       }
@@ -21,7 +23,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ 
       courses: result.rows.map(row => {
         const courseData = row.coursejson;
-        // Add bannerImageUrl to each course if it exists
+        // Add database fields to each course
+        courseData.cid = row.cid;
+        courseData.id = row.id;
         if (row.bannerimageurl) {
           courseData.bannerImageUrl = row.bannerimageurl;
         }

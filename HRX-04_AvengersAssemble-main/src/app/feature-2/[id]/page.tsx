@@ -11,10 +11,35 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Assuming shadcn dropdown components
 
+// Helper function to convert YouTube URL to embed format
+function getYouTubeEmbedUrl(url: string): string {
+  if (!url) return "";
+  
+  // Extract video ID from various YouTube URL formats
+  let videoId = "";
+  
+  // Format: https://www.youtube.com/watch?v=VIDEO_ID
+  if (url.includes("youtube.com/watch?v=")) {
+    videoId = url.split("watch?v=")[1].split("&")[0];
+  }
+  // Format: https://youtu.be/VIDEO_ID
+  else if (url.includes("youtu.be/")) {
+    videoId = url.split("youtu.be/")[1].split("?")[0];
+  }
+  // Format: https://www.youtube.com/embed/VIDEO_ID (already embed)
+  else if (url.includes("youtube.com/embed/")) {
+    return url;
+  }
+  
+  // Return embed URL
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+}
+
 function TopicReelModal({ open, onClose, subtopics, initialIndex }: { open: boolean; onClose: () => void; subtopics: Subtopic[]; initialIndex: number }) {
   const [index, setIndex] = useState(initialIndex);
   if (!open || !subtopics || subtopics.length === 0) return null;
   const subtopic = subtopics[index];
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-0 relative flex flex-col items-stretch">
@@ -32,19 +57,50 @@ function TopicReelModal({ open, onClose, subtopics, initialIndex }: { open: bool
             <p><span className="font-medium">Hands-on:</span> {subtopic.handsOn}</p>
             {subtopic.videoUrl && (
               <div className="mt-4">
-                <span className="font-medium flex items-center gap-2"><Video size={18} /> Video:</span>
-                <div className="mt-2">
+                <div className="flex items-center gap-2 mb-3">
+                  <Video size={20} className="text-red-600" /> 
+                  <span className="font-semibold text-gray-800">Video Tutorial</span>
+                </div>
+                
+                {/* YouTube Video Embed */}
+                <div className="relative w-full mb-3 rounded-lg overflow-hidden" style={{ paddingBottom: '56.25%' }}>
                   <iframe
-                    width="100%"
-                    height="240"
-                    src={subtopic.videoUrl.replace("watch?v=", "embed/")}
+                    className="absolute top-0 left-0 w-full h-full border-2 border-gray-200"
+                    src={getYouTubeEmbedUrl(subtopic.videoUrl)}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    className="rounded-md"
                   />
                 </div>
+
+                {/* Helpful Message */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+                  <p className="text-sm text-blue-800 flex items-start gap-2">
+                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <span>
+                      <strong>Can't see the video?</strong> Some videos can't be displayed here due to creator restrictions. No worries! Click the button below to watch it directly on YouTube. 🎥
+                    </span>
+                  </p>
+                </div>
+
+                {/* Fallback Button */}
+                <a
+                  href={subtopic.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-all shadow-md hover:shadow-xl transform hover:scale-105"
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                  Watch on YouTube
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
               </div>
             )}
           </div>

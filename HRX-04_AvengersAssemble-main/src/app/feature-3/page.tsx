@@ -211,7 +211,7 @@ Return as a JSON array with this structure:
 ]
 Do NOT include answers in the output to the user, but include them in the JSON.`;
   const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
     {
       method: "POST",
       headers: {
@@ -252,7 +252,7 @@ async function fetchReport(
     hintsInfo
   )}\nScore: ${score}`;
   const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent",
     {
       method: "POST",
       headers: {
