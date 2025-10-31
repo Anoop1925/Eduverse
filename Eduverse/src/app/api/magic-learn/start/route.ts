@@ -70,24 +70,23 @@ export async function POST() {
     // Start Streamlit server in background
     console.log('Starting Streamlit server at:', streamlitPath);
     
-    // Use batch file to properly activate venv and start streamlit
+    // Use VBScript to launch batch file silently (no window flash)
     const projectRoot = process.cwd();
-    const batchFilePath = path.join(projectRoot, 'start-streamlit-server.bat');
+    const vbsScriptPath = path.join(projectRoot, 'start-streamlit-silent.vbs');
     
-    if (!fs.existsSync(batchFilePath)) {
+    if (!fs.existsSync(vbsScriptPath)) {
       return NextResponse.json({ 
         success: false, 
-        message: 'Startup script not found at: ' + batchFilePath
+        message: 'Startup script not found at: ' + vbsScriptPath
       }, { status: 500 });
     }
     
-    console.log('Launching Streamlit via batch file:', batchFilePath);
+    console.log('Launching Streamlit silently via VBScript:', vbsScriptPath);
     
-    // Spawn the batch file in a new detached process
-    // Using 'start /B' runs it in background without creating a new window
-    streamlitProcess = spawn('cmd.exe', ['/c', batchFilePath], {
+    // Spawn VBScript which will run the batch file completely hidden
+    streamlitProcess = spawn('wscript.exe', [vbsScriptPath], {
       detached: true,
-      stdio: 'ignore',
+      stdio: ['ignore', 'ignore', 'ignore'],
       cwd: projectRoot,
       windowsHide: true
     });
