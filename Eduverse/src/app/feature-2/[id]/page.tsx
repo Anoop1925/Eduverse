@@ -221,56 +221,61 @@ export default function CourseDetailsPage() {
 
       {/* Gamified Roadmap */}
       <div className="mb-10">
-        <h2 className="text-2xl font-semibold text-blue-700 mb-6 flex items-start gap-2">
-          <BookOpen size={24} className="mt-1" /> Your Learning Journey
+        <h2 className="text-2xl font-semibold text-blue-700 mb-6 flex items-center gap-2" style={{ paddingLeft: '10px' }}>
+          <BookOpen size={24} /> &nbsp;Your Learning Journey
         </h2>
-        <div className="relative">
-          <div className="absolute left-1/2 transform -translate-x-1/2 h-full border-l-2 border-dashed border-blue-200" />
+        <div className="space-y-6">
           {course.chapters.map((ch, idx) => (
-            <div key={idx} className="mb-10 flex justify-between items-center w-full">
-              <div className={`w-5/12 bg-white p-4 rounded-lg shadow-sm ${completedChapters.has(idx) ? "ring-2 ring-green-400" : ""}`}>
-                <div
-                  className={`flex items-center p-3 bg-gray-50 rounded-lg transition-all duration-300 ${expanded === idx ? "ring-1 ring-blue-100" : ""}`}
-                  onClick={() => handleToggle(idx)}
-                >
-                  <div className={`w-8 h-8 flex items-center justify-center rounded-full font-medium ${completedChapters.has(idx) ? "bg-green-100 text-green-700" : "bg-blue-50 text-blue-700"}`}>
+            <div key={idx} className={`bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${completedChapters.has(idx) ? "ring-2 ring-green-400" : "border border-gray-200"}`}>
+              {/* Chapter Header */}
+              <div
+                className="flex items-center justify-between cursor-pointer group"
+                onClick={() => handleToggle(idx)}
+              >
+                <div className="flex items-center gap-4 flex-1">
+                  <div className={`w-10 h-10 flex items-center justify-center rounded-full font-semibold text-lg ${completedChapters.has(idx) ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}>
                     {idx + 1}
                   </div>
-                  <div className="ml-3">
-                    <h3 className="text-lg font-medium text-gray-800">{ch.chapterName}</h3>
-                    <p className="text-xs text-gray-500">Duration: {ch.duration}</p>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">{ch.chapterName}</h3>
+                    <p className="text-sm text-gray-500">Duration: {ch.duration}</p>
                   </div>
                 </div>
-                {expanded === idx && (
-                  <div className="mt-4 ml-12 space-y-2 text-left">
-                    <p className="text-sm font-medium text-gray-700">Subtopics:</p>
-                    <div className="flex flex-col gap-2">
-                      {ch.subtopics.map((subtopic, i) => (
-                        <button
-                          key={i}
-                          className="w-full px-4 py-2 bg-white border border-gray-200 rounded-md shadow hover:bg-gray-50 text-sm text-gray-800 font-medium transition-all hover:shadow-md text-left"
-                          onClick={() => setActiveSubtopic({ subtopics: ch.subtopics, index: i })}
-                        >
-                          {subtopic.title}
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      className={`mt-4 px-4 py-2 rounded-md font-semibold transition-colors ${completedChapters.has(idx) ? "bg-green-600 text-white" : "bg-blue-600 text-white hover:bg-blue-700"}`}
-                      onClick={() => handleMarkCompleted(idx)}
-                      disabled={completedChapters.has(idx)}
-                    >
-                      {completedChapters.has(idx) ? "Completed" : "Mark as Completed"}
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="w-2/12 flex justify-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${completedChapters.has(idx) ? "bg-green-100 text-green-700" : "bg-green-50 text-green-700"}`}>
-                  <CheckCircle size={20} />
+                
+                {/* Completion Icon */}
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${completedChapters.has(idx) ? "bg-green-500 text-white scale-110" : "bg-gray-100 text-gray-400"}`}>
+                  <CheckCircle size={24} />
                 </div>
               </div>
-              <div className="w-5/12 bg-white p-4 rounded-lg shadow-sm" />
+
+              {/* Expanded Subtopics Section */}
+              {expanded === idx && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <p className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                    <BookOpen size={16} />
+                    Subtopics:
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                    {ch.subtopics.map((subtopic, i) => (
+                      <button
+                        key={i}
+                        className="px-4 py-3 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 border border-blue-200 rounded-lg shadow-sm hover:shadow-md text-sm text-gray-800 font-medium transition-all duration-200 text-left flex items-center gap-2 group"
+                        onClick={() => setActiveSubtopic({ subtopics: ch.subtopics, index: i })}
+                      >
+                        <Video size={16} className="text-blue-600 group-hover:scale-110 transition-transform" />
+                        <span className="flex-1">{subtopic.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    className={`w-full md:w-auto px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${completedChapters.has(idx) ? "bg-green-600 text-white cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transform hover:scale-105"}`}
+                    onClick={() => handleMarkCompleted(idx)}
+                    disabled={completedChapters.has(idx)}
+                  >
+                    {completedChapters.has(idx) ? "✓ Completed" : "Mark as Completed"}
+                  </button>
+                </div>
+              )}
             </div>
           ))}
           {activeSubtopic && (
