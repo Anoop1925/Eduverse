@@ -1,0 +1,6 @@
+venv/**/*.dll filter=lfs diff=lfs merge=lfs -text
+venv/**/*.pyd filter=lfs diff=lfs merge=lfs -text
+venv/**/*.so filter=lfs diff=lfs merge=lfs -text
+venv/**/*.dylib filter=lfs diff=lfs merge=lfs -text
+venv/**/*.exe filter=lfs diff=lfs merge=lfs -text
+venv/**/*.whl filter=lfs diff=lfs merge=lfs -text

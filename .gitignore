@@ -1,0 +1,30 @@
+# Python - Only ignore compiled files, NOT venv (tracked with Git LFS)
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables only
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Other
+*.bak
+*.tmp

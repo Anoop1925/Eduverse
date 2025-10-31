@@ -375,7 +375,7 @@ class MagicLearnDrawInAir:
         imgCanvas = cv2.cvtColor(self.imgCanvas, cv2.COLOR_BGR2RGB)
         imgCanvas = Image.fromarray(imgCanvas)
         genai.configure(api_key=GOOGLE_API_KEY)
-        model = genai.GenerativeModel(model_name='gemini-1.5-flash')
+        model = genai.GenerativeModel(model_name='gemini-2.0-flash-exp')
         prompt = "Analyze the image and provide the following:\n" \
                  "* If a mathematical equation is present:\n" \
                  "   - The equation represented in the image.\n" \
@@ -522,7 +522,7 @@ def plot_crafter():
         game_prompt = st.text_area("Enter your story theme or concept:", height=150, key="plot_input")
         if st.button("Generate Plot", key="generate_btn"):
             genai.configure(api_key=GOOGLE_API_KEY)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')
             prompt = f"Create a detailed plot based on the theme: {game_prompt}"
             response = model.generate_content([prompt])
             st.markdown(f"""
@@ -563,7 +563,7 @@ def input_image_setup(uploaded_file):
         raise FileNotFoundError("No file uploaded")
 
 def get_gemini_response(input_text, image, prompt):
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.0-flash-exp')
     response = model.generate_content([input_text, image[0], prompt])
     return response.text
 
