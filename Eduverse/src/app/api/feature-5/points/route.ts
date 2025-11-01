@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import pool from "@/lib/db";
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Get user points and statistics
 export async function GET(req: NextRequest) {
@@ -14,53 +17,58 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     // Get user points and statistics
-    const pointsResult = await pool.query(
-      'SELECT * FROM user_points WHERE user_email = $1',
-      [userEmail]
-    );
+    const { data: pointsData, error: pointsError } = await supabase
+      .from('user_points')
+      .select('*')
+      .eq('user_email', userEmail)
+      .single();
+
+    if (pointsError && pointsError.code !== 'PGRST116') {
+      console.error('Points query error:', pointsError);
+    }
 
     // Get points history (last 10 entries)
-    const historyResult = await pool.query(
-      'SELECT * FROM points_history WHERE user_email = $1 ORDER BY earned_at DESC LIMIT 10',
-      [userEmail]
-    );
+    const { data: historyData } = await supabase
+      .from('points_history')
+      .select('*')
+      .eq('user_email', userEmail)
+      .order('earned_at', { ascending: false })
+      .limit(10);
 
-    // Get overall statistics
-    const statsResult = await pool.query(`
-      SELECT 
-        COUNT(DISTINCT up.course_id) as courses_started,
-        COUNT(CASE WHEN up.is_completed = true THEN 1 END) as total_chapters_completed,
-        COUNT(DISTINCT CASE WHEN up.is_completed = true THEN up.course_id END) as courses_completed
-      FROM user_progress up 
-      WHERE up.user_email = $1
-    `, [userEmail]);
+    // Get overall statistics from user_progress
+    const { data: progressData } = await supabase
+      .from('user_progress')
+      .select('course_id, is_completed')
+      .eq('user_email', userEmail);
 
-    const userPoints = pointsResult.rows[0] || {
+    const coursesStarted = new Set(progressData?.map((p: any) => p.course_id) || []).size;
+    const totalChaptersCompleted = progressData?.filter((p: any) => p.is_completed).length || 0;
+    const coursesCompleted = new Set(
+      progressData?.filter((p: any) => p.is_completed).map((p: any) => p.course_id) || []
+    ).size;
+
+    const userPoints = pointsData || {
       points: 0,
       total_chapters_completed: 0,
       total_courses_completed: 0
-    };
-
-    const stats = statsResult.rows[0] || {
-      courses_started: 0,
-      total_chapters_completed: 0,
-      courses_completed: 0
     };
 
     return NextResponse.json({
       points: userPoints.points || 0,
       totalChaptersCompleted: userPoints.total_chapters_completed || 0,
       totalCoursesCompleted: userPoints.total_courses_completed || 0,
-      coursesStarted: stats.courses_started || 0,
-      coursesCompleted: stats.courses_completed || 0,
-      history: historyResult.rows
+      coursesStarted: coursesStarted || 0,
+      coursesCompleted: coursesCompleted || 0,
+      history: historyData || []
     });
 
   } catch (error) {
     console.error("Points API error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch points" },
+      { error: "Failed to fetch points", details: (error as Error).message },
       { status: 500 }
     );
   }
@@ -72,22 +80,30 @@ export async function POST(req: NextRequest) {
     const { action } = await req.json();
 
     if (action === 'leaderboard') {
-      // Get top 10 users by points
-      const leaderboardResult = await pool.query(`
-        SELECT 
-          user_email,
-          points,
-          total_chapters_completed,
-          total_courses_completed,
-          ROW_NUMBER() OVER (ORDER BY points DESC) as rank
-        FROM user_points 
-        ORDER BY points DESC 
-        LIMIT 10
-      `);
+      const supabase = createClient(supabaseUrl, supabaseKey);
 
-      return NextResponse.json({
-        leaderboard: leaderboardResult.rows
-      });
+      // Get top 10 users by points
+      const { data: leaderboardData, error } = await supabase
+        .from('user_points')
+        .select('user_email, points, total_chapters_completed, total_courses_completed')
+        .order('points', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Leaderboard query error:', error);
+        return NextResponse.json(
+          { error: 'Failed to fetch leaderboard', details: error.message },
+          { status: 500 }
+        );
+      }
+
+      // Add ranks
+      const leaderboard = leaderboardData?.map((row: any, index: number) => ({
+        ...row,
+        rank: index + 1
+      })) || [];
+
+      return NextResponse.json({ leaderboard });
     }
 
     return NextResponse.json(

@@ -20,7 +20,7 @@ const AboutContent = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-1">1. Start Voice Call</h3>
               <p className="text-sm text-gray-600">
-                Click the start button to begin your voice conversation with EduBuddy
+                Click the start button to begin your voice conversation with AskSensei
               </p>
             </div>
           </div>
@@ -44,7 +44,7 @@ const AboutContent = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-1">3. Get AI Responses</h3>
               <p className="text-sm text-gray-600">
-                EduBuddy listens and responds with clear, helpful explanations in real-time
+                AskSensei listens and responds with clear, helpful explanations in real-time
               </p>
             </div>
           </div>
@@ -158,7 +158,7 @@ const AboutContent = () => {
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-1">•</span>
-                <span>Speak clearly and naturally - EduBuddy understands conversational language</span>
+                <span>Speak clearly and naturally - AskSensei understands conversational language</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-1">•</span>
@@ -190,7 +190,7 @@ export default function AiMentorPage() {
         <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">EduBuddy</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">AskSensei</h1>
               <p className="text-base text-gray-500">
                 Your AI-powered voice learning companion - available 24/7
               </p>
