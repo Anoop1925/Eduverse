@@ -49,7 +49,7 @@
 ### Clone and Install
 
 ```bash
-git https://github.com/Anoop1925/Youth-Coders-Hack-2025--Eduverse.git
+git https://github.com/Anoop1925/Eduverse.git
 cd Eduverse
 npm install
 
