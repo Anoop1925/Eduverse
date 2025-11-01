@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   Play, CheckCircle, ArrowLeft, Code2, Github, Globe, BookOpen, Search, Filter,
-  BarChart3, BookOpen as Book, Trophy, Zap, Terminal, Layers, Menu, X, Monitor, ArrowRight
+  BarChart3, BookOpen as Book, Trophy, Zap, Terminal, Layers, Menu, X, Monitor, ArrowRight,
+  Target, Brain, Users, Star, Lightbulb, Rocket, Award, Sparkles, Info
 } from 'lucide-react';
 import Confetti from 'react-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -3218,30 +3218,19 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4">
-       <div className="absolute inset-0">
-                <div className="absolute inset-0"
-                    style={{
-                        backgroundImage: `
-                            linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px)
-            `,
-                        backgroundSize: '64px 64px'
-                    }}
-                />
-            </div>
-      <Card className="w-full max-w-3xl bg-white/80 backdrop-blur-lg  rounded-2xl overflow-hidden">
-        <CardContent className="p-8">
+      <Card className="w-full max-w-4xl bg-white border-0 shadow-xl rounded-2xl overflow-hidden">
+        <CardContent className="p-10">
           <div className="space-y-8">
             {/* Chat-like header */}
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <Code2 className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+                <Code2 className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">EduVerse Assistant</h2>
+                <h2 className="text-xl font-bold text-gray-900">CodeLab Assistant</h2>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  <span className="text-sm text-gray-600">Online</span>
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                  <span className="text-sm text-gray-500">Ready to help you learn</span>
                 </div>
               </div>
             </div>
@@ -3256,9 +3245,9 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
                   className="space-y-6"
                 >
                   {/* Question bubble */}
-                  <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%] relative">
+                  <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl rounded-tl-none p-6 max-w-[90%] relative shadow-md border border-indigo-100">
                     <div className="flex items-end gap-2">
-                      <p className="text-gray-900 text-lg">
+                      <p className="text-gray-900 text-lg font-medium">
                         {typingEffect ? (
                           <span className="inline-flex gap-1">
                             <motion.span
@@ -3337,30 +3326,34 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5 }}
-                    className="grid grid-cols-2 sm:grid-cols-3 gap-4"
+                    className="grid grid-cols-2 sm:grid-cols-3 gap-5"
                   >
                     {programmingLanguages.map((lang) => (
                       <motion.button
                         key={lang.id}
-                        whileHover={{ scale: 1.02 }}
+                        whileHover={{ scale: 1.03, y: -4 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setSelectedLanguage(lang.id)}
-                        className={`relative p-6 rounded-xl border-2 transition-all duration-300 ${
+                        className={`relative p-7 rounded-2xl border-2 transition-all duration-300 shadow-sm hover:shadow-md ${
                           selectedLanguage === lang.id
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"
+                            ? "border-indigo-500 bg-gradient-to-br from-indigo-50 to-purple-50 shadow-lg"
+                            : "border-gray-200 hover:border-indigo-300 hover:bg-gray-50 bg-white"
                         }`}
                       >
-                        <div className="flex flex-col items-center gap-3">
-                          <span className="text-4xl">{lang.icon}</span>
-                          <span className="font-medium text-gray-900">{lang.name}</span>
+                        <div className="flex flex-col items-center gap-4">
+                          <span className="text-5xl transform transition-transform hover:scale-110">{lang.icon}</span>
+                          <span className={`font-semibold text-base ${selectedLanguage === lang.id ? 'text-indigo-700' : 'text-gray-900'}`}>
+                            {lang.name}
+                          </span>
                         </div>
                         {selectedLanguage === lang.id && (
                           <motion.div
                             layoutId="check"
-                            className="absolute top-2 right-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg"
                           >
-                            <CheckCircle className="w-4 h-4 text-white" />
+                            <CheckCircle className="w-5 h-5 text-white" />
                           </motion.div>
                         )}
                       </motion.button>
@@ -3376,9 +3369,9 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
                   className="space-y-6"
                 >
                   {/* Question bubble */}
-                  <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%] relative">
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl rounded-tl-none p-6 max-w-[90%] relative shadow-md border border-purple-100">
                     <div className="flex items-end gap-2">
-                      <p className="text-gray-900 text-lg">
+                      <p className="text-gray-900 text-lg font-medium">
                         {typingEffect ? (
                           <span className="inline-flex gap-1">
                             <motion.span
@@ -3436,30 +3429,34 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
-                    className="space-y-4"
+                    className="space-y-5"
                   >
                     {skillLevels.map((level) => (
                       <motion.button
                         key={level.id}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ scale: 1.01, x: 4 }}
+                        whileTap={{ scale: 0.99 }}
                         onClick={() => setSelectedLevel(level.id)}
-                        className={`w-full p-6 rounded-xl border-2 transition-all duration-300 text-left relative ${
+                        className={`w-full p-7 rounded-2xl border-2 transition-all duration-300 text-left relative shadow-sm hover:shadow-md ${
                           selectedLevel === level.id
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"
+                            ? "border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50 shadow-lg"
+                            : "border-gray-200 hover:border-purple-300 hover:bg-gray-50 bg-white"
                         }`}
                       >
-                        <div className="pr-8">
-                          <h3 className="font-semibold text-lg text-gray-900 mb-1">{level.name}</h3>
-                          <p className="text-gray-600">{level.description}</p>
+                        <div className="pr-12">
+                          <h3 className={`font-bold text-xl mb-2 ${selectedLevel === level.id ? 'text-purple-700' : 'text-gray-900'}`}>
+                            {level.name}
+                          </h3>
+                          <p className="text-gray-600 text-base leading-relaxed">{level.description}</p>
                         </div>
                         {selectedLevel === level.id && (
                           <motion.div
                             layoutId="check"
-                            className="absolute top-1/2 right-6 -translate-y-1/2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute top-1/2 right-6 -translate-y-1/2 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg"
                           >
-                            <CheckCircle className="w-4 h-4 text-white" />
+                            <CheckCircle className="w-5 h-5 text-white" />
                           </motion.div>
                         )}
                       </motion.button>
@@ -3470,7 +3467,7 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
             </AnimatePresence>
 
             {/* Navigation */}
-            <div className="flex items-center justify-between pt-4">
+            <div className="flex items-center justify-between pt-6">
               {currentStep === 2 && (
                 <Button
                   variant="ghost"
@@ -3479,18 +3476,18 @@ function LanguageSelection({ onComplete }: { onComplete: (language: string, leve
                     setShowError(false);
                     setTypingEffect(true);
                   }}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl px-5 py-2"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
                 </Button>
               )}
               <Button
-                className={`${currentStep === 2 ? 'ml-auto' : 'w-full'} bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-300`}
+                className={`${currentStep === 2 ? 'ml-auto' : 'w-full'} bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-10 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base`}
                 onClick={handleNext}
               >
-                {currentStep === 1 ? 'Continue' : 'Start Learning'}
-                <ArrowRight className="w-4 h-4 ml-2" />
+                {currentStep === 1 ? 'Continue' : 'Start Coding Journey'}
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
 
@@ -3544,17 +3541,17 @@ function TopicRecommendation({
   return (
     <div className="space-y-8">
       {/* Conversational Header */}
-      <Card className="bg-white/80 backdrop-blur-lg shadow-xl border-0 overflow-hidden">
+      <Card className="bg-white border-0 shadow-xl overflow-hidden">
         <CardContent className="p-8">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <Book className="w-6 h-6 text-white" />
+          <div className="flex items-start gap-6">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+              <Book className="w-8 h-8 text-white" />
             </div>
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-6">
               {/* Typing effect message */}
-              <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%] relative">
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl rounded-tl-none p-6 max-w-[90%] relative shadow-md border border-indigo-100">
                 <div className="flex items-end gap-2">
-                  <p className="text-gray-900 text-lg">
+                  <p className="text-gray-900 text-xl font-semibold">
                     {typingEffect ? (
                       <span className="inline-flex gap-1">
                         {`Here's what you can learn in ${programmingLanguages.find(l => l.id === language)?.name}`.split(' ').map((word, i) => (
@@ -3576,19 +3573,19 @@ function TopicRecommendation({
                     <motion.div
                       animate={{ opacity: [1, 0] }}
                       transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-                      className="w-2 h-4 bg-gray-400 rounded-sm"
+                      className="w-2.5 h-5 bg-indigo-400 rounded-sm"
                     />
                   )}
                 </div>
               </div>
 
               {/* Search bar with modern styling */}
-              <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <div className="relative max-w-xl">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-400" />
                 <Input
                   type="text"
-                  placeholder="Search topics..."
-                  className="pl-10 pr-4 py-2 w-full bg-white/50 backdrop-blur-sm border-gray-200 focus:border-indigo-500 rounded-xl text-gray-900"
+                  placeholder="Search topics... (e.g., arrays, sorting, OOP)"
+                  className="pl-12 pr-4 py-3 w-full bg-white border-2 border-gray-200 focus:border-indigo-400 rounded-xl text-gray-900 placeholder:text-gray-400 shadow-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -3609,12 +3606,12 @@ function TopicRecommendation({
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <Card 
-                className="group h-full bg-white/80 backdrop-blur-sm hover:bg-white/90 border border-gray-100 hover:border-indigo-200 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1"
+                className="group h-full bg-white border-2 border-gray-100 hover:border-indigo-300 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 shadow-md hover:shadow-2xl"
                 onClick={() => onSelectTopic(topic.id)}
               >
-                <CardHeader className="p-6 pb-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <CardHeader className="p-7 pb-5">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       {topic.language === "javascript" && (
                         <div className="flex items-center justify-center">
                           <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" className="w-8 h-8" />
@@ -3643,40 +3640,40 @@ function TopicRecommendation({
                       {topic.difficulty}
                     </Badge>
                   </div>
-                  <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
+                  <CardTitle className="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 leading-tight">
                     {topic.title}
                   </CardTitle>
-                  <CardDescription className="text-gray-600 mt-2">
+                  <CardDescription className="text-gray-600 mt-3 text-base leading-relaxed">
                     {topic.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 pt-0">
-                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 text-indigo-600 mb-3">
-                      <BookOpen className="h-4 w-4" />
-                      <span className="font-medium">{topic.problems.length} Interactive Challenges</span>
+                <CardContent className="p-7 pt-0">
+                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-100">
+                    <div className="flex items-center gap-2 text-indigo-700 mb-4">
+                      <BookOpen className="h-5 w-5" />
+                      <span className="font-semibold text-base">{topic.problems.length} Interactive Challenges</span>
                     </div>
-                    <ul className="space-y-2">
+                    <ul className="space-y-3">
                       {topic.problems.slice(0, 2).map(problem => (
-                        <li key={problem.id} className="flex items-center gap-2 text-sm text-gray-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div>
-                          {problem.title}
+                        <li key={problem.id} className="flex items-start gap-3 text-sm text-gray-700">
+                          <div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 flex-shrink-0"></div>
+                          <span className="leading-relaxed">{problem.title}</span>
                         </li>
                       ))}
                       {topic.problems.length > 2 && (
-                        <li className="text-sm font-medium text-indigo-600">
+                        <li className="text-sm font-semibold text-indigo-600 ml-5">
                           +{topic.problems.length - 2} more challenges
                         </li>
                       )}
                     </ul>
                   </div>
                 </CardContent>
-                <CardFooter className="p-6 pt-0">
+                <CardFooter className="p-7 pt-0">
                   <Button 
-                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md hover:shadow-xl transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 py-3 text-base font-semibold"
                   >
                     Start Learning
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </CardFooter>
               </Card>
@@ -3790,60 +3787,60 @@ function ProblemCard({ problem, isCompleted, onComplete, number, totalProblems }
       transition={{ duration: 0.4 }}
       className="relative w-full"
     >
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl overflow-visible w-full">
+      <Card className="bg-white border-2 border-gray-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 overflow-visible w-full">
         {/* Progress indicator */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100">
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gray-100 rounded-t-lg overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-indigo-600 to-blue-600 transition-all duration-500"
+            className="h-full bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-500"
             style={{ width: `${(number / totalProblems) * 100}%` }}
           />
         </div>
 
-        <CardHeader className="p-8 pb-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex gap-4 items-start">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+        <CardHeader className="p-10 pb-6 pt-12">
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex gap-5 items-start flex-1">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
                 {number}
               </div>
-              <div>
-                <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="flex-1">
+                <CardTitle className="text-3xl font-bold text-gray-900 mb-3 leading-tight">
                   {problem.title}
                 </CardTitle>
-                <CardDescription className="text-base text-gray-600 leading-relaxed">
+                <CardDescription className="text-lg text-gray-600 leading-relaxed">
                   {problem.description}
                 </CardDescription>
               </div>
             </div>
             {isSolved ? (
-              <div className="flex flex-col items-center">
-                <div className="p-2 rounded-full bg-green-50">
-                  <CheckCircle className="w-6 h-6 text-green-500" />
+              <div className="flex flex-col items-center gap-2">
+                <div className="p-3 rounded-2xl bg-green-50 shadow-md">
+                  <CheckCircle className="w-7 h-7 text-green-500" />
                 </div>
-                <span className="text-sm font-medium text-green-600 mt-1">Solved</span>
+                <span className="text-sm font-semibold text-green-600">Solved</span>
               </div>
             ) : (
-              <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 px-3 py-1">
+              <Badge variant="outline" className="bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 border-indigo-300 px-4 py-2 text-sm font-semibold">
                 Challenge
               </Badge>
             )}
           </div>
         </CardHeader>
 
-        <CardContent className="p-8 pt-0 space-y-6">
+        <CardContent className="p-10 pt-0 space-y-8">
           {/* Example section */}
-          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-100/50">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-indigo-900">Example:</h3>
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-7 border-2 border-indigo-100 shadow-sm">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-bold text-xl text-indigo-900">Example:</h3>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowHint(!showHint)}
-                className="text-indigo-700 hover:text-indigo-900 hover:bg-indigo-100/50"
+                className="text-indigo-700 hover:text-indigo-900 hover:bg-indigo-100 rounded-lg px-4 py-2 font-semibold"
               >
-                {showHint ? "Hide Hint" : "Show Hint"}
+                {showHint ? "Hide Hints" : "Show Hints"}
               </Button>
             </div>
-            <pre className="text-sm text-indigo-700 font-mono bg-white/50 p-4 rounded-lg border border-indigo-100/50">
+            <pre className="text-base text-indigo-700 font-mono bg-white p-5 rounded-xl border border-indigo-200 shadow-sm">
               {problem.example}
             </pre>
 
@@ -3854,13 +3851,19 @@ function ProblemCard({ problem, isCompleted, onComplete, number, totalProblems }
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="overflow-hidden mt-4"
+                  className="overflow-hidden mt-6"
                 >
-                  <div className="bg-white p-4 rounded-lg border border-indigo-100/50">
-                    <h4 className="text-sm font-semibold text-indigo-900 mb-3">Hints:</h4>
-                    <ul className="list-disc pl-5 text-sm text-indigo-700 space-y-2">
+                  <div className="bg-white p-6 rounded-xl border-2 border-indigo-200 shadow-sm">
+                    <h4 className="text-base font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                      <Lightbulb className="w-5 h-5" />
+                      Helpful Hints:
+                    </h4>
+                    <ul className="space-y-3">
                       {hints.map((hint, i) => (
-                        <li key={i}>{hint}</li>
+                        <li key={i} className="flex items-start gap-3 text-sm text-indigo-700 leading-relaxed">
+                          <div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 flex-shrink-0"></div>
+                          <span>{hint}</span>
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -3870,21 +3873,21 @@ function ProblemCard({ problem, isCompleted, onComplete, number, totalProblems }
           </div>
 
           {/* Code editor section */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Your Solution:</h3>
+              <h3 className="font-bold text-xl text-gray-900">Your Solution:</h3>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setCodeExpanded(!codeExpanded)}
-                className="bg-green-50 text-green-700 hover:bg-green-100 rounded-full px-4 py-1 transition-colors duration-200"
+                className="bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 hover:bg-green-100 rounded-xl px-5 py-2 font-semibold transition-all duration-200 border border-green-200"
               >
-                {codeExpanded ? "Collapse" : "Expand to run the code"}
+                {codeExpanded ? "Collapse Editor" : "Expand Editor"}
               </Button>
             </div>
             <div 
-              className="transition-all duration-300 rounded-lg overflow-hidden"
-              style={{ height: codeExpanded ? '400px' : '200px' }}
+              className="transition-all duration-300 rounded-xl overflow-hidden border-2 border-gray-200 shadow-lg"
+              style={{ height: codeExpanded ? '450px' : '250px' }}
             >
               <CodeEditor initialCode={problem.starterCode} onOutput={handleRunCode} />
             </div>
@@ -3892,16 +3895,16 @@ function ProblemCard({ problem, isCompleted, onComplete, number, totalProblems }
 
           {/* Output section */}
           {output && (
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200/50 mt-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900">Output:</h3>
+            <div className={`rounded-2xl p-7 border-2 shadow-lg ${isSolved ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200' : 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200'}`}>
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="font-bold text-xl text-gray-900">Output:</h3>
                 {isSolved && (
-                  <Badge className="bg-green-500 text-white px-3 py-1">
-                    Correct Answer
+                  <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 text-base shadow-md">
+                    ✓ Correct Answer
                   </Badge>
                 )}
               </div>
-              <pre className="text-sm font-mono text-gray-700 bg-white p-4 rounded-lg border border-gray-200/50 overflow-x-auto">
+              <pre className="text-base font-mono text-gray-800 bg-white p-5 rounded-xl border-2 border-gray-200 overflow-x-auto shadow-sm">
                 {output}
               </pre>
             </div>
@@ -3935,23 +3938,23 @@ function ProblemsList({ problems, topicTitle }: { problems: Problem[], topicTitl
   }, [completedProblems, problems.length]);
 
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-10 w-full">
       {/* Progress tracking card */}
-      <Card className="bg-white w-full">
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+      <Card className="bg-gradient-to-br from-white to-gray-50 w-full shadow-xl border-2 border-gray-100">
+        <CardContent className="p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-6">
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Practice Challenges</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Practice Challenges</h3>
+              <p className="text-gray-600 text-base font-medium">
                 {completedProblems.length} of {problems.length} challenges completed
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <Trophy className={`w-5 h-5 ${progress === 100 ? 'text-yellow-500' : 'text-gray-400'}`} />
-              <span className="font-medium text-lg">{Math.round(progress)}%</span>
+            <div className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-3 rounded-xl border border-indigo-200">
+              <Trophy className={`w-6 h-6 ${progress === 100 ? 'text-yellow-500' : 'text-gray-400'}`} />
+              <span className="font-bold text-2xl text-gray-900">{Math.round(progress)}%</span>
             </div>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={progress} className="h-3 bg-gray-200" />
         </CardContent>
       </Card>
 
@@ -3989,31 +3992,32 @@ function ProblemsList({ problems, topicTitle }: { problems: Problem[], topicTitl
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            <Card className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl border-0">
-              <CardContent className="p-8 text-center">
+            <Card className="bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 text-white shadow-2xl border-0 overflow-hidden relative">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20"></div>
+              <CardContent className="p-12 text-center relative z-10">
                 <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4">
-                    <Trophy className="w-10 h-10 text-yellow-500" />
+                  <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mb-6 shadow-2xl animate-bounce">
+                    <Trophy className="w-14 h-14 text-yellow-500" />
                   </div>
-                  <h2 className="text-3xl font-bold mb-2">
+                  <h2 className="text-4xl font-bold mb-4">
                     🎉 Congratulations! 🎉
                   </h2>
-                  <p className="text-indigo-100 max-w-md mx-auto mb-6">
-                    You've successfully completed all challenges in this topic.
-                    Keep up the great work!
+                  <p className="text-xl text-purple-100 max-w-xl mx-auto mb-8 leading-relaxed">
+                    You've successfully completed all challenges in this topic!
+                    Your dedication to learning is truly inspiring. Keep up the amazing work!
                   </p>
-                  <div className="grid grid-cols-3 gap-4 w-full max-w-md">
-                    <div className="bg-white/20 p-3 rounded-lg">
-                      <div className="text-2xl font-bold">{problems.length}</div>
-                      <div className="text-xs text-indigo-100">Challenges</div>
+                  <div className="grid grid-cols-3 gap-6 w-full max-w-2xl">
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-2xl border border-white/30 shadow-xl">
+                      <div className="text-4xl font-bold mb-1">{problems.length}</div>
+                      <div className="text-sm text-purple-100 font-medium">Challenges</div>
                     </div>
-                    <div className="bg-white/20 p-3 rounded-lg">
-                      <div className="text-2xl font-bold">100%</div>
-                      <div className="text-xs text-indigo-100">Accuracy</div>
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-2xl border border-white/30 shadow-xl">
+                      <div className="text-4xl font-bold mb-1">100%</div>
+                      <div className="text-sm text-purple-100 font-medium">Complete</div>
                     </div>
-                    <div className="bg-white/20 p-3 rounded-lg">
-                      <div className="text-2xl font-bold">★★★</div>
-                      <div className="text-xs text-indigo-100">Rating</div>
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-2xl border border-white/30 shadow-xl">
+                      <div className="text-4xl font-bold mb-1">⭐⭐⭐</div>
+                      <div className="text-sm text-purple-100 font-medium">Rating</div>
                     </div>
                   </div>
                 </div>
@@ -4046,32 +4050,32 @@ function VideoSection({
 }) {
   return (
     <div className="space-y-6">
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border-0 shadow-2xl overflow-hidden">
         <div className="flex flex-col">
           {/* Title and Badges Section */}
-          <div className="p-8">
-            <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="p-10">
+            <div className="flex flex-wrap items-center gap-4 mb-8">
               <Badge 
                 variant="outline" 
-                className="bg-gradient-to-r from-indigo-50 to-blue-50 text-indigo-700 border-indigo-200 px-4 py-1.5 text-sm font-medium"
+                className="bg-gradient-to-r from-indigo-50 to-blue-50 text-indigo-700 border-indigo-300 px-5 py-2 text-base font-semibold rounded-lg"
               >
                 {programmingLanguages.find(l => l.id === language)?.name}
               </Badge>
               <Badge 
                 variant={difficulty === "beginner" ? "outline" : difficulty === "intermediate" ? "secondary" : "default"}
-                className={`px-4 py-1.5 text-sm font-medium ${
+                className={`px-5 py-2 text-base font-semibold rounded-lg ${
                   difficulty === "beginner" 
-                    ? "bg-green-50 text-green-700 border-green-200" 
+                    ? "bg-green-50 text-green-700 border-green-300" 
                     : difficulty === "intermediate"
-                    ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-                    : "bg-red-50 text-red-700 border-red-200"
+                    ? "bg-yellow-50 text-yellow-700 border-yellow-300"
+                    : "bg-red-50 text-red-700 border-red-300"
                 }`}
               >
                 {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
               </Badge>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">{title}</h1>
-            <p className="text-gray-600 text-lg leading-relaxed">{description}</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-5 leading-tight">{title}</h1>
+            <p className="text-gray-600 text-xl leading-relaxed">{description}</p>
           </div>
 
           {/* Video Player */}
@@ -4087,43 +4091,45 @@ function VideoSection({
           </div>
 
           {/* Features and Start Button */}
-          <div className="p-8 bg-gradient-to-b from-white/50 to-white">
-            <div className="max-w-4xl mx-auto space-y-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="flex items-center gap-3 group">
-                  <div className="p-2 rounded-lg bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
-                    <BookOpen className="w-5 h-5 text-indigo-600" />
+          <div className="p-10 bg-gradient-to-b from-gray-50/50 to-white">
+            <div className="max-w-5xl mx-auto space-y-10">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="flex flex-col items-center text-center gap-3 group">
+                  <div className="p-3 rounded-xl bg-indigo-50 group-hover:bg-indigo-100 transition-colors shadow-sm">
+                    <BookOpen className="w-6 h-6 text-indigo-600" />
                   </div>
-                  <span className="font-medium text-gray-700">Comprehensive tutorial</span>
+                  <span className="font-semibold text-gray-700 text-sm">Comprehensive tutorial</span>
                 </div>
-                <div className="flex items-center gap-3 group">
-                  <div className="p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
-                    <Code2 className="w-5 h-5 text-blue-600" />
+                <div className="flex flex-col items-center text-center gap-3 group">
+                  <div className="p-3 rounded-xl bg-blue-50 group-hover:bg-blue-100 transition-colors shadow-sm">
+                    <Code2 className="w-6 h-6 text-blue-600" />
                   </div>
-                  <span className="font-medium text-gray-700">Interactive challenges</span>
+                  <span className="font-semibold text-gray-700 text-sm">Interactive challenges</span>
                 </div>
-                <div className="flex items-center gap-3 group">
-                  <div className="p-2 rounded-lg bg-purple-50 group-hover:bg-purple-100 transition-colors">
-                    <Zap className="w-5 h-5 text-purple-600" />
+                <div className="flex flex-col items-center text-center gap-3 group">
+                  <div className="p-3 rounded-xl bg-purple-50 group-hover:bg-purple-100 transition-colors shadow-sm">
+                    <Zap className="w-6 h-6 text-purple-600" />
                   </div>
-                  <span className="font-medium text-gray-700">Hands-on practice</span>
+                  <span className="font-semibold text-gray-700 text-sm">Hands-on practice</span>
                 </div>
-                <div className="flex items-center gap-3 group">
-                  <div className="p-2 rounded-lg bg-green-50 group-hover:bg-green-100 transition-colors">
-                    <Trophy className="w-5 h-5 text-green-600" />
+                <div className="flex flex-col items-center text-center gap-3 group">
+                  <div className="p-3 rounded-xl bg-green-50 group-hover:bg-green-100 transition-colors shadow-sm">
+                    <Trophy className="w-6 h-6 text-green-600" />
                   </div>
-                  <span className="font-medium text-gray-700">Track progress</span>
+                  <span className="font-semibold text-gray-700 text-sm">Track progress</span>
                 </div>
               </div>
 
               {!practiceStarted && (
-                <Button
-                  onClick={onStartPractice}
-                  className="w-full md:w-auto md:min-w-[240px] mx-auto flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-lg py-6 shadow-lg hover:shadow-xl transition-all duration-200 group"
-                >
-                  <Play className="w-5 h-5 transition-transform group-hover:scale-110" />
-                  Start Practice Challenges
-                </Button>
+                <div className="flex justify-center">
+                  <Button
+                    onClick={onStartPractice}
+                    className="w-full md:w-auto md:min-w-[280px] flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-lg font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 group"
+                  >
+                    <Play className="w-6 h-6 transition-transform group-hover:scale-110" />
+                    Start Practice Challenges
+                  </Button>
+                </div>
               )}
             </div>
           </div>
@@ -4133,7 +4139,210 @@ function VideoSection({
   );
 }
 
+// About Content Component
+function AboutContent() {
+  return (
+    <div className="space-y-16">
+      {/* Hero Section */}
+      <div className="text-center max-w-3xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full mb-6">
+            <Sparkles className="w-4 h-4 text-indigo-600" />
+            <span className="text-sm font-medium text-indigo-700">Master Programming Through Practice</span>
+          </div>
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+            Welcome to <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">CodeLab</span>
+          </h1>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            Your interactive playground for mastering programming concepts. Learn by doing with 
+            real-world coding challenges across multiple languages.
+          </p>
+        </motion.div>
+      </div>
+
+      {/* How It Works */}
+      <section>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">How It Works</h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Target,
+                title: "Choose Your Path",
+                description: "Select your preferred programming language and skill level",
+                color: "from-purple-500 to-pink-500"
+              },
+              {
+                icon: BookOpen,
+                title: "Learn Concepts",
+                description: "Watch comprehensive video tutorials on key topics",
+                color: "from-blue-500 to-indigo-500"
+              },
+              {
+                icon: Code2,
+                title: "Code & Practice",
+                description: "Solve interactive coding challenges with instant feedback",
+                color: "from-indigo-500 to-purple-500"
+              },
+              {
+                icon: Trophy,
+                title: "Track Progress",
+                description: "Monitor your improvement and celebrate achievements",
+                color: "from-green-500 to-emerald-500"
+              }
+            ].map((step, index) => (
+              <Card key={index} className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardContent className="p-6">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 shadow-lg`}>
+                    <step.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-sm font-bold text-gray-500 mb-2">Step {index + 1}</div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Key Features */}
+      <section>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Key Features</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
+              <div className="w-10 h-10 rounded-lg bg-blue-500 text-white flex items-center justify-center mb-3">
+                <Terminal className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Live Code Editor</h4>
+              <p className="text-sm text-gray-600">Write and execute code directly in your browser</p>
+            </div>
+
+            <div className="p-5 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100">
+              <div className="w-10 h-10 rounded-lg bg-purple-500 text-white flex items-center justify-center mb-3">
+                <Rocket className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Multiple Languages</h4>
+              <p className="text-sm text-gray-600">Practice JavaScript, Python, Java, C++, and more</p>
+            </div>
+
+            <div className="p-5 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100">
+              <div className="w-10 h-10 rounded-lg bg-green-500 text-white flex items-center justify-center mb-3">
+                <Brain className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Smart Hints</h4>
+              <p className="text-sm text-gray-600">Get contextual hints when you're stuck</p>
+            </div>
+
+            <div className="p-5 rounded-lg bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-100">
+              <div className="w-10 h-10 rounded-lg bg-yellow-500 text-white flex items-center justify-center mb-3">
+                <Award className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Progress Tracking</h4>
+              <p className="text-sm text-gray-600">Visual progress bars and achievement badges</p>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Perfect For Section */}
+      <section>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Perfect For</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100">
+              <div className="w-10 h-10 rounded-lg bg-purple-500 text-white flex items-center justify-center mb-3">
+                <Users className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Beginners</h4>
+              <p className="text-sm text-gray-600">Start your coding journey with guided tutorials and beginner-friendly challenges</p>
+            </div>
+
+            <div className="p-5 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
+              <div className="w-10 h-10 rounded-lg bg-blue-500 text-white flex items-center justify-center mb-3">
+                <Brain className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Students</h4>
+              <p className="text-sm text-gray-600">Supplement your coursework with practical coding exercises and real-world examples</p>
+            </div>
+
+            <div className="p-5 rounded-lg bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100">
+              <div className="w-10 h-10 rounded-lg bg-indigo-500 text-white flex items-center justify-center mb-3">
+                <Rocket className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Developers</h4>
+              <p className="text-sm text-gray-600">Sharpen your skills and learn new languages through hands-on practice</p>
+            </div>
+
+            <div className="p-5 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100">
+              <div className="w-10 h-10 rounded-lg bg-green-500 text-white flex items-center justify-center mb-3">
+                <Target className="w-5 h-5" />
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-1">Job Seekers</h4>
+              <p className="text-sm text-gray-600">Prepare for technical interviews with coding challenges and problem-solving</p>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Pro Tips */}
+      <section>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-0 shadow-lg">
+            <CardContent className="p-8">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                  <Lightbulb className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Pro Tips</h3>
+                  <ul className="space-y-3">
+                    {[
+                      "Start with the beginner level to build a strong foundation before advancing",
+                      "Watch the video tutorials completely before attempting the coding challenges",
+                      "Use the hint system when stuck, but try to solve problems independently first",
+                      "Practice consistently - even 30 minutes daily makes a significant difference",
+                      "Don't rush - understanding concepts is more important than speed"
+                    ].map((tip, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
+                        <span className="text-gray-700 leading-relaxed">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </section>
+    </div>
+  );
+}
+
 export default function Feature4Page() {
+  const [activeTab, setActiveTab] = useState<"about" | "practice">("about");
   const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
   const [practiceStarted, setPracticeStarted] = useState(false);
   const [userLanguage, setUserLanguage] = useState("javascript");
@@ -4167,69 +4376,143 @@ export default function Feature4Page() {
   const currentTopic = selectedTopic ? topics.find(t => t.id === selectedTopic) : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 relative">
+    <div className="min-h-screen bg-white relative">
       <GridBackground />
       <div className="min-h-screen">
         <main className="w-full">
-          <div className="max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8">
-            {!setupComplete ? (
-              <LanguageSelection onComplete={handleSetupComplete} />
-            ) : !selectedTopic ? (
-              <div className="max-w-[1400px] w-full">
-                <div className="flex items-center gap-4 mb-8">
-                  <button
-                    onClick={handleBack}
-                    className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                    Back to Setup
-                  </button>
+          <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-8"
+            >
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div>
+                  <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                    Code<span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Lab</span>
+                  </h1>
+                  <p className="text-gray-600">Master programming through hands-on practice</p>
                 </div>
-                <TopicRecommendation
-                  language={userLanguage}
-                  level={userLevel}
-                  onSelectTopic={handleTopicSelect}
-                />
+                <Button
+                  onClick={() => {
+                    setActiveTab("practice");
+                    if (!setupComplete) {
+                      // Will show language selection
+                    }
+                  }}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <Rocket className="w-4 h-4 mr-2" />
+                  Start Coding
+                </Button>
               </div>
-            ) : currentTopic ? (
-              <div className="max-w-[1400px] w-full space-y-8">
-                <div className="flex items-center gap-4 mb-2">
+            </motion.div>
+
+            {/* Tabs */}
+            <div className="border-b border-gray-200 -mx-4 sm:-mx-6 lg:-mx-8 mb-12">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-2 gap-0">
                   <button
-                    onClick={handleBack}
-                    className="group inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all duration-200 hover:-translate-x-1"
+                    onClick={() => setActiveTab("about")}
+                    className={`flex items-center justify-center gap-2 px-6 py-4 font-semibold text-base transition-all relative ${
+                      activeTab === "about"
+                        ? "text-gray-900"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
                   >
-                    <ArrowLeft className="w-5 h-5 transition-transform group-hover:scale-110" />
-                    <span className="font-medium">Back to Topics</span>
+                    <Info className="w-4 h-4" />
+                    About
+                    {activeTab === "about" && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("practice")}
+                    className={`flex items-center justify-center gap-2 px-6 py-4 font-semibold text-base transition-all relative ${
+                      activeTab === "practice"
+                        ? "text-gray-900"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <Code2 className="w-4 h-4" />
+                    Practice
+                    {activeTab === "practice" && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                    )}
                   </button>
                 </div>
+              </div>
+            </div>
 
-                <div className="grid grid-cols-1 gap-8">
-                  <VideoSection
-                    videoUrl={currentTopic.videoUrl}
-                    onStartPractice={handleStartPractice}
-                    practiceStarted={practiceStarted}
-                    title={currentTopic.title}
-                    description={currentTopic.description}
-                    language={currentTopic.language}
-                    difficulty={currentTopic.difficulty}
-                  />
+            {/* Content */}
+            <div className="space-y-8">
+              {activeTab === "about" && <AboutContent />}
 
-                  {practiceStarted && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="w-full overflow-visible"
-                    >
-                      <ProblemsList
-                        problems={currentTopic.problems}
-                        topicTitle={currentTopic.title}
+              {activeTab === "practice" && (
+                <div className="space-y-8">
+                {!setupComplete ? (
+                  <LanguageSelection onComplete={handleSetupComplete} />
+                ) : !selectedTopic ? (
+                  <div className="w-full">
+                    <div className="flex items-center gap-4 mb-8">
+                      <button
+                        onClick={handleBack}
+                        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                      >
+                        <ArrowLeft className="w-5 h-5" />
+                        Back to Setup
+                      </button>
+                    </div>
+                    <TopicRecommendation
+                      language={userLanguage}
+                      level={userLevel}
+                      onSelectTopic={handleTopicSelect}
+                    />
+                  </div>
+                ) : currentTopic ? (
+                  <div className="w-full space-y-8">
+                    <div className="flex items-center gap-4 mb-2">
+                      <button
+                        onClick={handleBack}
+                        className="group inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all duration-200 hover:-translate-x-1"
+                      >
+                        <ArrowLeft className="w-5 h-5 transition-transform group-hover:scale-110" />
+                        <span className="font-medium">Back to Topics</span>
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-8">
+                      <VideoSection
+                        videoUrl={currentTopic.videoUrl}
+                        onStartPractice={handleStartPractice}
+                        practiceStarted={practiceStarted}
+                        title={currentTopic.title}
+                        description={currentTopic.description}
+                        language={currentTopic.language}
+                        difficulty={currentTopic.difficulty}
                       />
-                    </motion.div>
-                  )}
+
+                      {practiceStarted && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5 }}
+                          className="w-full overflow-visible"
+                        >
+                          <ProblemsList
+                            problems={currentTopic.problems}
+                            topicTitle={currentTopic.title}
+                          />
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                ) : null}
                 </div>
-              </div>
-            ) : null}
+              )}
+            </div>
           </div>
         </main>
       </div>
